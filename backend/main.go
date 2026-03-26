@@ -30,7 +30,7 @@ func main() {
 
 	if serverConfig.Env == "development" {
 		server = &http.Server{
-			Addr:         ":4000",
+			Addr:         serverConfig.Port,
 			Handler:      r,
 			ReadTimeout:  10 * time.Second,
 			WriteTimeout: 10 * time.Second,

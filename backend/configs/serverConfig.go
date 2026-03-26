@@ -14,7 +14,7 @@ type ServerConfig struct {
 }
 
 func GetServerConfig() *ServerConfig {
-	err := godotenv.Load()
+	err := godotenv.Load("../.env")
 
 	if err != nil {
 		slog.Warn(
