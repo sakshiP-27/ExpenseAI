@@ -1,0 +1,8 @@
+# Virtual Environments
+venv
+
+# Env Variables
+.env
+
+# Other files
+genAI/__pycache__
