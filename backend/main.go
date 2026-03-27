@@ -2,6 +2,8 @@ package main
 
 import (
 	"Backend/configs"
+	"Backend/handlers"
+	"Backend/services"
 	"context"
 	"fmt"
 	"log/slog"
@@ -21,6 +23,16 @@ func main() {
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"message": "Backend Service running"}`))
 	})
+
+	// creating services
+	authService := services.NewAuthService()
+
+	// creating handlers & injecting services into them
+	authHandler := &handlers.AuthHandler{Service: authService}
+
+	// registering the routes
+	r.Post("/auth/login", authHandler.HandleLogin)
+	r.Post("/auth/signup", authHandler.HandleSignUp)
 
 	// getting the configs
 	serverConfig := configs.GetServerConfig()

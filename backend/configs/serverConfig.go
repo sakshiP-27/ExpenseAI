@@ -8,9 +8,11 @@ import (
 )
 
 type ServerConfig struct {
-	Port string
-	Host string
-	Env  string
+	Port         string
+	Host         string
+	Env          string
+	SecretKey    string
+	OpenAIAPIKey string
 }
 
 func GetServerConfig() *ServerConfig {
@@ -23,9 +25,11 @@ func GetServerConfig() *ServerConfig {
 	}
 
 	serverConfig := &ServerConfig{
-		Port: os.Getenv("BACKEND_PORT"),
-		Host: os.Getenv("BACKEND_HOST"),
-		Env:  os.Getenv("ENV"),
+		Port:         os.Getenv("BACKEND_PORT"),
+		Host:         os.Getenv("BACKEND_HOST"),
+		Env:          os.Getenv("ENV"),
+		SecretKey:    os.Getenv("ENCRYPTION_SECRET_KEY"),
+		OpenAIAPIKey: os.Getenv("OPENAI_API_KEY"),
 	}
 
 	return serverConfig
