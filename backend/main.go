@@ -4,8 +4,10 @@ import (
 	"Backend/configs"
 	"Backend/handlers"
 	"Backend/middlewares"
+	"Backend/repositories"
 	"Backend/services"
 	"context"
+	"database/sql"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -32,9 +34,24 @@ func main() {
 	// getting the configs
 	serverConfig := configs.GetServerConfig()
 
+	// creating the db connection object
+	connectionString := serverConfig.DatabaseConnectionString
+	db, err := sql.Open("pgx", connectionString)
+
+	if err != nil {
+		slog.Error(
+			"DB connection not established!",
+			slog.Any("Error", err),
+		)
+	}
+
+	// creating repos
+	authRepository := repositories.NewAuthRepository(db)
+	uploadRepository := repositories.NewUploadRepository(db)
+
 	// creating services
-	authService := services.NewAuthService()
-	uploadService := services.NewUploadService()
+	authService := services.NewAuthService(authRepository)
+	uploadService := services.NewUploadService(uploadRepository)
 
 	// creating handlers & injecting services into them
 	authHandler := &handlers.AuthHandler{Service: authService}
@@ -92,7 +109,7 @@ func main() {
 	defer cancel()
 
 	// shutdown using the shutdown context (Attempting graceful shutdown)
-	err := server.Shutdown(shutdownCtx)
+	err = server.Shutdown(shutdownCtx)
 	if err != nil {
 		slog.Error(
 			"Server forced to shutdown:",

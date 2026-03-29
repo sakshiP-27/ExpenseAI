@@ -2,19 +2,22 @@ package services
 
 import (
 	"Backend/errors"
+	"Backend/repositories"
 	"Backend/utils"
 	"log/slog"
 	"net/http"
 	"strings"
 )
 
-type AuthService struct{}
-
-func NewAuthService() *AuthService {
-	return &AuthService{}
+type AuthService struct {
+	Repo *repositories.AuthRepository
 }
 
-// imitating the repository layer for now
+func NewAuthService(repo *repositories.AuthRepository) *AuthService {
+	return &AuthService{Repo: repo}
+}
+
+// TODO: imitating the repository layer for now
 var passwordCache = map[string]string{}
 
 var adminEmails = []string{
@@ -23,7 +26,7 @@ var adminEmails = []string{
 }
 
 func (*AuthService) Login(email string, password string) (string, string, string, string, error, []byte, int) {
-	// get the hashed password from the passwordCache
+	// TODO: (From DB) get the hashed password from the passwordCache
 	hashedPassword, exists := passwordCache[email]
 
 	if !exists {
@@ -52,6 +55,8 @@ func (*AuthService) Login(email string, password string) (string, string, string
 
 	// Getting the user role by checking the email in db
 	var role string = "user"
+
+	// TODO: get this from the repository
 	for _, adminEmail := range adminEmails {
 		if email == adminEmail {
 			role = "admin"
@@ -74,8 +79,8 @@ func (*AuthService) Login(email string, password string) (string, string, string
 	return jwtToken, userID, email, role, nil, nil, 0
 }
 
-func (*AuthService) Signup(email string, password string) (string, string, string, string, error, []byte, int) {
-	// Check if user already exists
+func (s *AuthService) Signup(email string, password string) (string, string, string, string, error, []byte, int) {
+	// TODO: Check if user already exists
 	if _, exists := passwordCache[email]; exists {
 		slog.Debug("User already exists!", slog.String("Email", email))
 		errorJson, badRequestError := errors.NewBadRequestError("User already exists, please login instead", nil)
@@ -96,13 +101,13 @@ func (*AuthService) Signup(email string, password string) (string, string, strin
 
 	slog.Debug("Successfully hashed the incoming password", slog.String("Email", email))
 
-	// store the hashedpassword along with the mail in the database (imitating the db for now)
+	// TODO: store the hashedpassword along with the mail in the database (imitating the db for now)
 	passwordCache[email] = hashedPassword
 
 	slog.Debug("Retrieved the user hashed password from the database (repository)", slog.String("Email", email))
 
 	// once the signup process is completed then autologin
-	jwttoken, userID, userEmail, role, err, errJson, errorCode := NewAuthService().Login(email, password)
+	jwttoken, userID, userEmail, role, err, errJson, errorCode := s.Login(email, password)
 
 	if err != nil {
 		if errorCode == http.StatusBadRequest {

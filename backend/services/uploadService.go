@@ -4,6 +4,7 @@ import (
 	"Backend/configs"
 	"Backend/errors"
 	"Backend/models"
+	"Backend/repositories"
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
@@ -14,14 +15,16 @@ import (
 	"net/http"
 )
 
-type UploadService struct{}
+type UploadService struct {
+	Repo *repositories.UploadRepository
+}
 
 var serverConfig configs.ServerConfig
 
 var GenAIURL string = fmt.Sprintf("http://%s:%s/%s", serverConfig.GenAIHost, serverConfig.GenAIPort, serverConfig.GenAIUploadEndpoint)
 
-func NewUploadService() *UploadService {
-	return &UploadService{}
+func NewUploadService(repo *repositories.UploadRepository) *UploadService {
+	return &UploadService{Repo: repo}
 }
 
 func (*UploadService) ProcessReceiptImage(message string, currency string, userID string, email string, r *http.Request) ([]byte, error, int, []byte) {
