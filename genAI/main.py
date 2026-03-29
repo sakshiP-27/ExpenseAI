@@ -19,7 +19,7 @@ def read_health():
 @app.post(config.GENAI_UPLOAD_API, response_model=UploadReceiptResponse)
 def process_uploaded_receipt(request: UploadReceiptRequest):
     # initialising the CV Service handler
-    cvHandler = ProcessReceipts()
+    cvHandler = ProcessReceipts(config.OCR_API_KEY)
     receiptData: dict = cvHandler.convertImageToData(request.image, request.userContext.currency)
 
     return receiptData

@@ -11,3 +11,4 @@ class ServerConfig:
     GENAI_GENERATE_SUMMARY_API = os.getenv("GENAI_GENERATE_SUMMARY_API", "/generatesummary")
     GENAI_GET_ANALYTICS_API = os.getenv("GENAI_GET_ANALYTICS_API", "/getanalytics")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+    OCR_API_KEY = os.getenv("OCR_API_KEY", "")

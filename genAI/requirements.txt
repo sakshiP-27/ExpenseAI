@@ -4,6 +4,6 @@ python-dotenv
 uvicorn[standard]
 pandas
 openai
-pytesseract
 requests
 pillow
+mindee

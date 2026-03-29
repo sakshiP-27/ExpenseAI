@@ -1,12 +1,12 @@
 import base64
-from io import BytesIO
 import json
-from PIL import Image
-import pytesseract
 import requests
+from io import BytesIO
+from PIL import Image
+from mindee import Client, product
 
 class ProcessReceipts:
-    def __init__(self):
+    def __init__(self, apiKey):
         pass
 
     def convertImageToData(self, image: str, currency: str) -> dict:
