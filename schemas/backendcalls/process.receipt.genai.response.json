@@ -7,11 +7,13 @@
     {
       "name": "Milk",
       "price": 60,
+      "quantity": 1,
       "category": "Food"
     },
     {
       "name": "Shampoo",
       "price": 240,
+      "quantity": 2,
       "category": "Personal Care"
     }
   ],

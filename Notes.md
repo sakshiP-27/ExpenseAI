@@ -1,0 +1,1 @@
+https://docs.mindee.com/integrations/api-keys
