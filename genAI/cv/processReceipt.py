@@ -2,12 +2,21 @@ import base64
 import json
 import requests
 from io import BytesIO
+import openai
 from PIL import Image
-from mindee import Client, product
+from mindee import (
+    ClientV2,
+    InferenceParameters,
+    InferenceResponse,
+    BytesInput
+)
 
 class ProcessReceipts:
-    def __init__(self, apiKey):
-        self.apiKey = apiKey
+    def __init__(self, ocrApiKey, modelId, openAiApiKey):
+        self.ocrApiKey = ocrApiKey
+        self.openAiApiKey = openAiApiKey
+        self.ocrClient = ClientV2(self.ocrApiKey)
+        self.modelId = modelId
 
     def convertImageToData(self, image: str, currency: str) -> dict:
         # Creating the image from the bytes sent by the backend

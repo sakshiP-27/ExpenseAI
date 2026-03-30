@@ -42,7 +42,6 @@ func GetServerConfig() *ServerConfig {
 		GenAIUploadEndpoint:      os.Getenv("GENAI_UPLOAD_API"),
 		Env:                      os.Getenv("ENV"),
 		SecretKey:                os.Getenv("ENCRYPTION_SECRET_KEY"),
-		OpenAIAPIKey:             os.Getenv("OPENAI_API_KEY"),
 		DatabaseConnectionString: os.Getenv("DATABASE_CONNECTION_STRING"),
 	}
 

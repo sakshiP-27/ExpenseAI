@@ -12,3 +12,4 @@ class ServerConfig:
     GENAI_GET_ANALYTICS_API = os.getenv("GENAI_GET_ANALYTICS_API", "/getanalytics")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
     OCR_API_KEY = os.getenv("OCR_API_KEY", "")
+    MODEL_ID = os.getenv("OCR_MODEL_ID")
