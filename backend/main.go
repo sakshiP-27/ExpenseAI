@@ -2,12 +2,12 @@ package main
 
 import (
 	"Backend/configs"
+	"Backend/db"
 	"Backend/handlers"
 	"Backend/middlewares"
 	"Backend/repositories"
 	"Backend/services"
 	"context"
-	"database/sql"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -34,20 +34,24 @@ func main() {
 	// getting the configs
 	serverConfig := configs.GetServerConfig()
 
-	// creating the db connection object
-	connectionString := serverConfig.DatabaseConnectionString
-	db, err := sql.Open("pgx", connectionString)
-
+	// creating the db connection & running migrations
+	err := db.Connect(serverConfig.DatabaseConnectionString)
 	if err != nil {
-		slog.Error(
-			"DB connection not established!",
-			slog.Any("Error", err),
-		)
+		slog.Error("DB connection not established!", slog.Any("Error", err))
+		os.Exit(1)
+	}
+	defer db.Close()
+
+	// running the db migrations
+	err = db.RunMigrations()
+	if err != nil {
+		slog.Error("Failed to run migrations!", slog.Any("Error", err))
+		os.Exit(1)
 	}
 
-	// creating repos
-	authRepository := repositories.NewAuthRepository(db)
-	uploadRepository := repositories.NewUploadRepository(db)
+	// creating repositories
+	authRepository := repositories.NewAuthRepository(db.Pool)
+	uploadRepository := repositories.NewUploadRepository(db.Pool)
 
 	// creating services
 	authService := services.NewAuthService(authRepository)

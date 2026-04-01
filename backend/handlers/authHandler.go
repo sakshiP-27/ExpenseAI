@@ -12,6 +12,7 @@ import (
 type LoginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	Country  string `json:"country"`
 }
 
 // Response structure
@@ -88,7 +89,7 @@ func (s *AuthHandler) HandleSignUp(w http.ResponseWriter, r *http.Request) {
 
 	slog.Info("Signup attempt received")
 
-	token, userID, userEmail, role, serviceErr, errJson, errCode := s.Service.Signup(signupReq.Email, signupReq.Password)
+	token, userID, userEmail, role, serviceErr, errJson, errCode := s.Service.Signup(signupReq.Email, signupReq.Password, signupReq.Country)
 
 	if serviceErr != nil {
 		w.Header().Set("Content-Type", "application/json")

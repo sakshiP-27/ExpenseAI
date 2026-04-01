@@ -20,6 +20,7 @@ type ServerConfig struct {
 	SecretKey                string
 	OpenAIAPIKey             string
 	DatabaseConnectionString string
+	BucketEndpoint           string
 }
 
 func GetServerConfig() *ServerConfig {
@@ -43,6 +44,7 @@ func GetServerConfig() *ServerConfig {
 		Env:                      os.Getenv("ENV"),
 		SecretKey:                os.Getenv("ENCRYPTION_SECRET_KEY"),
 		DatabaseConnectionString: os.Getenv("DATABASE_CONNECTION_STRING"),
+		BucketEndpoint:           os.Getenv("BUCKET_ENDPOINT_STRING"),
 	}
 
 	return serverConfig

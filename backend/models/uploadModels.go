@@ -36,7 +36,7 @@ type ReceiptItems struct {
 
 // Backend Response struct
 type BackendUploadResponse struct {
-	ReceiptID         int                `json:"receiptID"`
+	ReceiptID         string             `json:"receiptID"`
 	UserID            string             `json:"userID"`
 	Email             string             `json:"email"`
 	Merchant          string             `json:"merchant"`

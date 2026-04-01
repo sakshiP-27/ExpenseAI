@@ -33,7 +33,7 @@ func NewUploadService(repo *repositories.UploadRepository) *UploadService {
 	return &UploadService{Repo: repo}
 }
 
-func (*UploadService) ProcessReceiptImage(file multipart.File, currency string, userID string, email string) ([]byte, error, int, []byte) {
+func (s *UploadService) ProcessReceiptImage(file multipart.File, currency string, userID string, email string) ([]byte, error, int, []byte) {
 	slog.Info("Processing receipt image",
 		slog.String("UserID", userID),
 		slog.String("Currency", currency),
@@ -63,9 +63,14 @@ func (*UploadService) ProcessReceiptImage(file multipart.File, currency string, 
 		slog.Float64("ConfidenceScore", uploadResp.ConfidenceScore),
 	)
 
-	// TODO: store this data in the DB and get the receipt ID
+	// storing the receipt data in the database
+	receiptID, err := s.Repo.StoreReceipt(userID, uploadResp, "")
+	if err != nil {
+		slog.Error("Failed to store receipt in DB", slog.Any("Error", err))
+		errJsonData, internalServerError := errors.NewInternalServerError("Error while storing receipt data", err)
+		return nil, internalServerError, internalServerError.Code, errJsonData
+	}
 
-	var receiptID int = 0
 	var merchant string = uploadResp.Merchant
 	var date string = uploadResp.Date
 	var totalAmount float64 = uploadResp.TotalAmount

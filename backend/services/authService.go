@@ -6,7 +6,6 @@ import (
 	"Backend/utils"
 	"log/slog"
 	"net/http"
-	"strings"
 )
 
 type AuthService struct {
@@ -17,19 +16,20 @@ func NewAuthService(repo *repositories.AuthRepository) *AuthService {
 	return &AuthService{Repo: repo}
 }
 
-// TODO: imitating the repository layer for now
-var passwordCache = map[string]string{}
+func (s *AuthService) Login(email string, password string) (string, string, string, string, error, []byte, int) {
+	// get the hashed password from the database
+	userInfo, err := s.Repo.GetUserByEmail(email)
 
-var adminEmails = []string{
-	"sahilshah2104@gmail.com",
-	"sakshipaygude27@gmail.com",
-}
+	if err != nil {
+		slog.Error(
+			"Error while retrieving the user data from the DB",
+			slog.Any("Error", err),
+		)
+		errorJson, internalServerError := errors.NewInternalServerError("Error while retrieving the user data from the DB", err)
+		return "", "", "", "", internalServerError, errorJson, internalServerError.Code
+	}
 
-func (*AuthService) Login(email string, password string) (string, string, string, string, error, []byte, int) {
-	// TODO: (From DB) get the hashed password from the passwordCache
-	hashedPassword, exists := passwordCache[email]
-
-	if !exists {
+	if userInfo == nil {
 		slog.Debug(
 			"User not present please login!",
 			slog.String("Email", email),
@@ -38,8 +38,11 @@ func (*AuthService) Login(email string, password string) (string, string, string
 		return "", "", "", "", badRequestError, errorJson, badRequestError.Code
 	}
 
+	// fetch the hashed password from the returned user data
+	hashedPassword := userInfo.PasswordHash
+
 	// send this hashedPassword and original password for comparison
-	err := utils.ComparePassword(hashedPassword, password)
+	err = utils.ComparePassword(hashedPassword, password)
 
 	if err != nil {
 		slog.Error(
@@ -51,17 +54,24 @@ func (*AuthService) Login(email string, password string) (string, string, string
 	}
 
 	// extracting the userID from the mail itself
-	userID := strings.Split(email, "@")[0]
+	userID := userInfo.ID
 
 	// Getting the user role by checking the email in db
 	var role string = "user"
+	exists, err := s.Repo.CheckUserAdmin(email)
 
-	// TODO: get this from the repository
-	for _, adminEmail := range adminEmails {
-		if email == adminEmail {
-			role = "admin"
-			break
-		}
+	if err != nil {
+		slog.Error(
+			"Error while fetching the admin status from the DB",
+			slog.Any("Error", err),
+		)
+		errorJson, internalServerError := errors.NewInternalServerError("Error while fetching the admin status from the DB", err)
+		return "", "", "", "", internalServerError, errorJson, internalServerError.Code
+	}
+
+	// if the email exists in the db (admin table) then mark them as admin
+	if exists {
+		role = "admin"
 	}
 
 	// generating the JWT token for this part
@@ -79,12 +89,23 @@ func (*AuthService) Login(email string, password string) (string, string, string
 	return jwtToken, userID, email, role, nil, nil, 0
 }
 
-func (s *AuthService) Signup(email string, password string) (string, string, string, string, error, []byte, int) {
-	// TODO: Check if user already exists
-	if _, exists := passwordCache[email]; exists {
-		slog.Debug("User already exists!", slog.String("Email", email))
+func (s *AuthService) Signup(email string, password string, country string) (string, string, string, string, error, []byte, int) {
+	// check if the user already exists in the DB
+	slog.Debug("Checking the DB if the signup user is already exists")
+
+	userInfo, err := s.Repo.GetUserByEmail(email)
+	if userInfo != nil {
 		errorJson, badRequestError := errors.NewBadRequestError("User already exists, please login instead", nil)
 		return "", "", "", "", badRequestError, errorJson, badRequestError.Code
+	}
+
+	if err != nil {
+		slog.Error(
+			"Error while retrieving the data from the DB",
+			slog.Any("Error", err),
+		)
+		errorJson, internalServerError := errors.NewInternalServerError("Error while retrieving the data from the DB", err)
+		return "", "", "", "", internalServerError, errorJson, internalServerError.Code
 	}
 
 	// Hash the incoming password
@@ -101,10 +122,19 @@ func (s *AuthService) Signup(email string, password string) (string, string, str
 
 	slog.Debug("Successfully hashed the incoming password", slog.String("Email", email))
 
-	// TODO: store the hashedpassword along with the mail in the database (imitating the db for now)
-	passwordCache[email] = hashedPassword
+	// store the hashedpassword along with the mail in the database
+	err = s.Repo.StoreUserInfo(email, hashedPassword, country)
 
-	slog.Debug("Retrieved the user hashed password from the database (repository)", slog.String("Email", email))
+	if err != nil {
+		slog.Error(
+			"Error while storing the user data in the DB",
+			slog.Any("Error", err),
+		)
+		errorJson, internalServerError := errors.NewInternalServerError("Error while storing the user data in the DB", err)
+		return "", "", "", "", internalServerError, errorJson, internalServerError.Code
+	}
+
+	slog.Debug("Stored the user hashed password in the database (repository)", slog.String("Email", email))
 
 	// once the signup process is completed then autologin
 	jwttoken, userID, userEmail, role, err, errJson, errorCode := s.Login(email, password)
