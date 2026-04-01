@@ -13,12 +13,12 @@ type ServerConfig struct {
 	BackendLoginAPI          string
 	BackendSignupAPI         string
 	BackendUploadAPI         string
+	BackendSummaryAPI        string
 	GenAIPort                string
 	GenAIHost                string
 	GenAIUploadEndpoint      string
 	Env                      string
 	SecretKey                string
-	OpenAIAPIKey             string
 	DatabaseConnectionString string
 	BucketEndpoint           string
 }
@@ -38,6 +38,7 @@ func GetServerConfig() *ServerConfig {
 		BackendLoginAPI:          os.Getenv("BACKEND_LOGIN_API"),
 		BackendSignupAPI:         os.Getenv("BACKEND_SIGNUP_API"),
 		BackendUploadAPI:         os.Getenv("BACKEND_UPLOAD_API"),
+		BackendSummaryAPI:        os.Getenv("BACKEND_SUMMARY_API="),
 		GenAIPort:                os.Getenv("GENAI_PORT"),
 		GenAIHost:                os.Getenv("GENAI_HOST"),
 		GenAIUploadEndpoint:      os.Getenv("GENAI_UPLOAD_API"),
