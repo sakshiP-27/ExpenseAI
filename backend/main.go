@@ -24,6 +24,7 @@ func main() {
 	r := chi.NewRouter()
 
 	// applying the common middlewares
+	r.Use(middlewares.CORSMiddleware)
 	r.Use(middlewares.LoggingMiddleware)
 
 	// healthcheck route
@@ -77,6 +78,7 @@ func main() {
 		r.Post(serverConfig.BackendManualExpenseAPI, uploadHandler.HandleManualExpense)
 		r.Get(serverConfig.BackendAnalyticsAPI, summaryHandler.HandleGetAnalytics)
 		r.Get(serverConfig.BackendInsightsAPI, summaryHandler.HandleGetInsights)
+		r.Get("/todayreceipts", summaryHandler.HandleGetTodayReceipts)
 	})
 
 	// initialising the server

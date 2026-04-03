@@ -39,6 +39,7 @@ func RunMigrations() error {
 		"migrations/003_add_analytics_insights.sql",
 		"migrations/004_add_entry_source.sql",
 		"migrations/005_seed_new_categories.sql",
+		"migrations/006_add_user_name.sql",
 	}
 
 	for _, file := range files {

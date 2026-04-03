@@ -170,3 +170,54 @@ func (repo *SummaryRepository) GetCachedInsights(userID string, period string) (
 
 	return &result, nil
 }
+
+// TodayReceiptRow represents a receipt with its items for today's view.
+type TodayReceiptRow struct {
+	ReceiptID       string
+	Merchant        string
+	Date            time.Time
+	TotalAmount     float64
+	Currency        string
+	ConfidenceScore float64
+	Source          string
+	ItemName        string
+	ItemPrice       float64
+	ItemQuantity    int
+	CategoryName    string
+}
+
+// GetTodayReceipts fetches all receipts uploaded today for a given user.
+func (repo *SummaryRepository) GetTodayReceipts(userID string) ([]TodayReceiptRow, error) {
+	query := `
+		SELECT
+			r.id, r.merchant, r.date, r.total_amount, r.currency,
+			r.confidence_score, r.source,
+			i.name, i.price, i.quantity, c.name
+		FROM receipts r
+		JOIN items i      ON i.receipt_id = r.id
+		JOIN categories c ON c.id = i.category_id
+		WHERE r.user_id = $1 AND r.created_at::date = CURRENT_DATE
+		ORDER BY r.created_at DESC, r.id, i.name`
+
+	rows, err := repo.DB.Query(context.Background(), query, userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query today receipts: %w", err)
+	}
+	defer rows.Close()
+
+	var results []TodayReceiptRow
+	for rows.Next() {
+		var row TodayReceiptRow
+		err := rows.Scan(
+			&row.ReceiptID, &row.Merchant, &row.Date, &row.TotalAmount, &row.Currency,
+			&row.ConfidenceScore, &row.Source,
+			&row.ItemName, &row.ItemPrice, &row.ItemQuantity, &row.CategoryName,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan today receipt row: %w", err)
+		}
+		results = append(results, row)
+	}
+
+	return results, nil
+}

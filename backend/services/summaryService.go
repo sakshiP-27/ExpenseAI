@@ -245,3 +245,49 @@ func (s *SummaryService) GetCachedInsights(userID string) (*models.CachedInsight
 		ComputedAt: cached.ComputedAt.Format("2006-01-02T15:04:05Z"),
 	}, nil
 }
+
+func (s *SummaryService) GetTodayReceipts(userID string) (*models.TodayReceiptsResponse, error) {
+	slog.Info("Fetching today's receipts", slog.String("UserID", userID))
+
+	rows, err := s.Repo.GetTodayReceipts(userID)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching today receipts: %w", err)
+	}
+
+	receiptsMap := make(map[string]*models.TodayReceipt)
+	var orderedIDs []string
+
+	for _, row := range rows {
+		if _, exists := receiptsMap[row.ReceiptID]; !exists {
+			receiptsMap[row.ReceiptID] = &models.TodayReceipt{
+				ReceiptID:         row.ReceiptID,
+				Merchant:          row.Merchant,
+				Date:              row.Date.Format("2006-01-02"),
+				TotalAmount:       row.TotalAmount,
+				Currency:          row.Currency,
+				ConfidenceScore:   row.ConfidenceScore,
+				Source:            row.Source,
+				Items:             []models.TodayReceiptItem{},
+				CategoriesSummary: make(map[string]float64),
+			}
+			orderedIDs = append(orderedIDs, row.ReceiptID)
+		}
+
+		r := receiptsMap[row.ReceiptID]
+		r.Items = append(r.Items, models.TodayReceiptItem{
+			Name:     row.ItemName,
+			Price:    row.ItemPrice,
+			Quantity: row.ItemQuantity,
+			Category: row.CategoryName,
+		})
+		r.CategoriesSummary[row.CategoryName] += row.ItemPrice
+	}
+
+	receipts := make([]models.TodayReceipt, 0, len(orderedIDs))
+	for _, id := range orderedIDs {
+		receipts = append(receipts, *receiptsMap[id])
+	}
+
+	slog.Info("Today's receipts fetched", slog.String("UserID", userID), slog.Int("Count", len(receipts)))
+	return &models.TodayReceiptsResponse{Receipts: receipts}, nil
+}

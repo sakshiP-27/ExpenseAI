@@ -85,3 +85,33 @@ func (h *SummaryHandler) HandleGetInsights(w http.ResponseWriter, r *http.Reques
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
 }
+
+func (h *SummaryHandler) HandleGetTodayReceipts(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value("userID").(string)
+
+	slog.Info("Get today receipts request received", slog.String("UserID", userID))
+
+	data, err := h.Service.GetTodayReceipts(userID)
+	if err != nil {
+		slog.Error("Failed to get today receipts", slog.String("UserID", userID), slog.Any("Error", err))
+		errJSON, internalErr := errors.NewInternalServerError("Error while fetching today's receipts", err)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(internalErr.Code)
+		w.Write(errJSON)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(data)
+	if err != nil {
+		slog.Error("Failed to marshal today receipts response", slog.String("UserID", userID), slog.Any("Error", err))
+		errJSON, internalErr := errors.NewInternalServerError("Error while preparing today's receipts response", err)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(internalErr.Code)
+		w.Write(errJSON)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonResponse)
+}

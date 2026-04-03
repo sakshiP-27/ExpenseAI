@@ -65,3 +65,28 @@ type CachedInsightsResponse struct {
 	Period     string          `json:"period"`
 	ComputedAt string          `json:"computedAt"`
 }
+
+// --- Today's receipts response (served to frontend) ---
+
+type TodayReceiptItem struct {
+	Name     string  `json:"name"`
+	Price    float64 `json:"price"`
+	Quantity int     `json:"quantity"`
+	Category string  `json:"category"`
+}
+
+type TodayReceipt struct {
+	ReceiptID         string             `json:"receiptID"`
+	Merchant          string             `json:"merchant"`
+	Date              string             `json:"date"`
+	TotalAmount       float64            `json:"totalAmount"`
+	Currency          string             `json:"currency"`
+	ConfidenceScore   float64            `json:"confidenceScore"`
+	Source            string             `json:"source"`
+	Items             []TodayReceiptItem `json:"items"`
+	CategoriesSummary map[string]float64 `json:"categoriesSummary"`
+}
+
+type TodayReceiptsResponse struct {
+	Receipts []TodayReceipt `json:"receipts"`
+}

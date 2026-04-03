@@ -1,0 +1,114 @@
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 32px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.left, .right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+.right {
+  justify-content: flex-end;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.logoIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--pink-dark));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logoText {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-secondary);
+  padding: 4px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.tab:hover {
+  color: var(--text-secondary);
+}
+.tab.active {
+  background: var(--bg-card);
+  color: var(--accent-dark);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.themeBtn {
+  padding: 8px;
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  transition: color 0.2s, background 0.2s;
+}
+.themeBtn:hover {
+  color: var(--yellow-dark);
+  background: var(--yellow-bg);
+}
+
+.email {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logoutBtn {
+  padding: 8px;
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  transition: color 0.2s, background 0.2s;
+}
+.logoutBtn:hover {
+  color: var(--red-dark);
+  background: var(--red-bg);
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 12px 16px; }
+  .email { display: none; }
+  .tab span { display: none; }
+  .tab { padding: 8px 14px; }
+}

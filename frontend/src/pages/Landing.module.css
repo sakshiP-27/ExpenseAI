@@ -1,0 +1,493 @@
+.page {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Decorative blobs ── */
+.blobField {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+}
+.blob1 {
+  width: 500px;
+  height: 500px;
+  background: var(--accent-light);
+  top: -10%;
+  right: -5%;
+}
+.blob2 {
+  width: 400px;
+  height: 400px;
+  background: var(--pink);
+  bottom: 20%;
+  left: -8%;
+}
+.blob3 {
+  width: 350px;
+  height: 350px;
+  background: var(--green);
+  bottom: -5%;
+  right: 20%;
+  opacity: 0.2;
+}
+
+/* ── Nav ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logoIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--accent), var(--pink-dark));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logoText {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.navLink {
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+.navLink:hover {
+  color: var(--text-primary);
+}
+.themeBtn {
+  padding: 8px;
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  transition: color 0.2s, background 0.2s;
+}
+.themeBtn:hover {
+  color: var(--yellow-dark);
+  background: var(--yellow-bg);
+}
+.navCta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: var(--shadow-md);
+}
+.navCta:hover {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
+}
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 80px 40px 60px;
+}
+.heroContent {
+  flex: 1;
+  max-width: 520px;
+}
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  background: var(--accent-bg);
+  color: var(--accent-dark);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 28px;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+}
+.heroTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.12;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  letter-spacing: -1px;
+}
+.heroSub {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 36px;
+}
+.heroActions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Hero visual */
+.heroVisual {
+  position: relative;
+  flex: 1;
+  max-width: 440px;
+}
+.heroIllustration {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 8px 30px rgba(167, 139, 250, 0.15));
+}
+.heroIllustration {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 8px 30px rgba(167, 139, 250, 0.15));
+}
+.floatCard {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-md);
+  white-space: nowrap;
+}
+.floatCard1 {
+  top: 8%;
+  right: -10%;
+}
+.floatCard2 {
+  bottom: 12%;
+  left: -8%;
+}
+
+/* ── Buttons ── */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--accent), var(--pink-dark));
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 24px rgba(167, 139, 250, 0.3);
+}
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 32px rgba(167, 139, 250, 0.4);
+}
+.btnSecondary {
+  padding: 14px 32px;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, transform 0.2s;
+}
+.btnSecondary:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+/* ── Section header ── */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.sectionIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--accent-bg);
+  color: var(--accent-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.sectionHeader h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.sectionHeader p {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+}
+
+/* ── Features ── */
+.features {
+  position: relative;
+  z-index: 1;
+  padding: 80px 40px;
+}
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.featureGrid > *:last-child {
+  grid-column: 2;
+}
+.featureCard {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  cursor: default;
+  overflow: hidden;
+}
+.featureCard:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-hover);
+}
+.featureTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.featureIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.featureIllustration {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+.featureCard h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+.featureCard p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ── How it works ── */
+.howItWorks {
+  position: relative;
+  z-index: 1;
+  padding: 80px 40px;
+  background: var(--bg-secondary);
+}
+.stepsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.stepCard {
+  text-align: center;
+  padding: 36px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  position: relative;
+}
+.stepIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+}
+.stepNum {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.stepCard h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.stepCard p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.stepConnector {
+  display: none;
+  position: absolute;
+  right: -28px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  opacity: 0.4;
+}
+
+/* ── CTA ── */
+.cta {
+  position: relative;
+  z-index: 1;
+  padding: 80px 40px;
+}
+.ctaInner {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 56px 40px;
+  background: linear-gradient(135deg, var(--accent-bg), var(--pink-bg));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+}
+.ctaIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent), var(--pink-dark));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+.ctaInner h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.ctaInner p {
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  font-size: 1.05rem;
+}
+
+/* ── Footer ── */
+.footer {
+  position: relative;
+  z-index: 1;
+  padding: 32px 40px;
+  border-top: 1px solid var(--border);
+}
+.footerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.footerBrand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footerInner p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.footerLink {
+  color: var(--accent-dark);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+.footerLink:hover {
+  color: var(--accent);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 50px 24px 40px;
+  }
+  .heroContent { max-width: 100%; }
+  .heroActions { justify-content: center; }
+  .heroVisual { max-width: 320px; }
+  .floatCard { display: none; }
+  .featureGrid { grid-template-columns: 1fr; }
+  .featureGrid > *:last-child { grid-column: auto; }
+  .stepsRow { grid-template-columns: 1fr; max-width: 360px; }
+}
+@media (max-width: 768px) {
+  .nav { padding: 14px 20px; }
+  .features, .howItWorks, .cta { padding: 60px 20px; }
+  .footerInner { flex-direction: column; gap: 10px; text-align: center; }
+  .footer { padding: 24px 20px; }
+}
+
+@media (min-width: 900px) {
+  .stepConnector { display: block; }
+}

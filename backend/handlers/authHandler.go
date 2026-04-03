@@ -10,6 +10,7 @@ import (
 
 // Request structure
 type LoginRequest struct {
+	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Country  string `json:"country"`
@@ -19,6 +20,7 @@ type LoginRequest struct {
 type AuthResponse struct {
 	Token  string `json:"token"`
 	UserID string `json:"userID"`
+	Name   string `json:"name"`
 	Email  string `json:"email"`
 	Role   string `json:"role"`
 }
@@ -48,7 +50,7 @@ func (s *AuthHandler) HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	slog.Info("Login attempt received")
 
-	token, userID, userEmail, role, serviceErr, errJson, errCode := s.Service.Login(loginReq.Email, loginReq.Password)
+	token, userID, userName, userEmail, role, serviceErr, errJson, errCode := s.Service.Login(loginReq.Email, loginReq.Password)
 
 	if serviceErr != nil {
 		w.Header().Set("Content-Type", "application/json")
@@ -58,7 +60,7 @@ func (s *AuthHandler) HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := AuthResponse{Token: token, UserID: userID, Email: userEmail, Role: role}
+	response := AuthResponse{Token: token, UserID: userID, Name: userName, Email: userEmail, Role: role}
 	responseJson, _ := json.Marshal(response)
 
 	w.Header().Set("Content-Type", "application/json")
@@ -89,7 +91,7 @@ func (s *AuthHandler) HandleSignUp(w http.ResponseWriter, r *http.Request) {
 
 	slog.Info("Signup attempt received")
 
-	token, userID, userEmail, role, serviceErr, errJson, errCode := s.Service.Signup(signupReq.Email, signupReq.Password, signupReq.Country)
+	token, userID, userName, userEmail, role, serviceErr, errJson, errCode := s.Service.Signup(signupReq.Name, signupReq.Email, signupReq.Password, signupReq.Country)
 
 	if serviceErr != nil {
 		w.Header().Set("Content-Type", "application/json")
@@ -99,7 +101,7 @@ func (s *AuthHandler) HandleSignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := AuthResponse{Token: token, UserID: userID, Email: userEmail, Role: role}
+	response := AuthResponse{Token: token, UserID: userID, Name: userName, Email: userEmail, Role: role}
 	responseJson, _ := json.Marshal(response)
 
 	w.Header().Set("Content-Type", "application/json")
