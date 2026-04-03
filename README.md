@@ -72,7 +72,7 @@ The project is split into three independently running services:
 
 **Database**
 - PostgreSQL with UUID primary keys
-- Tables: `users`, `categories`, `receipts`, `items`, `user_analytics`, `user_insights`
+- Tables: `users`, `categories`, `receipts`, `items`, `user_analytics`, `user_insights`, `admins`
 
 ---
 
