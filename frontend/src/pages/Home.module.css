@@ -42,10 +42,17 @@
 /* ── Upload section ── */
 .uploadSection {
   background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.uploadSection:hover {
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  border-color: var(--border-hover);
 }
 
 /* Tab bar */
@@ -129,17 +136,19 @@
   padding: 12px 24px;
   border-radius: var(--radius-full);
   background: var(--bg-card);
+  backdrop-filter: blur(8px);
   border: 1px solid var(--border);
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--text-primary);
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: var(--shadow-sm);
 }
 .uploadBtn:hover {
-  border-color: var(--accent-light);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  color: var(--accent-dark);
 }
 
 /* ── Preview ── */
@@ -410,12 +419,19 @@
 /* ── Today section ── */
 .todaySection {
   background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
   position: sticky;
-  top: 80px;
+  top: 90px;
+  transition: box-shadow 0.3s ease;
+}
+.todaySection:hover {
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  border-color: var(--border-hover);
 }
 .todayHeader {
   display: flex;
@@ -479,13 +495,19 @@
   overflow-y: auto;
 }
 .txnCard {
-  padding: 16px;
-  background: var(--bg-secondary);
+  padding: 18px;
+  background: var(--bg-card);
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
-  transition: border-color 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
 }
-.txnCard:hover { border-color: var(--border-hover); }
+.txnCard:hover { 
+  border-color: var(--accent-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background: var(--bg-card-hover);
+}
 .txnTop {
   display: flex;
   justify-content: space-between;
